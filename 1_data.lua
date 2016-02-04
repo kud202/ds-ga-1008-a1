@@ -118,24 +118,6 @@ trainData.data[{ {},1,{},{} }]:div(std)
 testData.data[{ {},1,{},{} }]:add(-mean)
 testData.data[{ {},1,{},{} }]:div(std)
 
--- Local normalization
-print '==> preprocessing data: normalize locally'
-
--- Define the normalization neighborhood:
-neighborhood = image.gaussian1D(7)
-
--- Define our local normalization operator (It is an actual nn module, 
--- which could be inserted into a trainable model):
-normalization = nn.SpatialContrastiveNormalization(1, neighborhood, 1):float()
-
--- Normalize all channels locally:
-for i = 1,trainData:size() do
-   trainData.data[{ i,{1},{},{} }] = normalization:forward(trainData.data[{ i,{1},{},{} }])
-end
-for i = 1,testData:size() do
-   testData.data[{ i,{1},{},{} }] = normalization:forward(testData.data[{ i,{1},{},{} }])
-end
-
 ----------------------------------------------------------------------
 print '==> verify statistics'
 
